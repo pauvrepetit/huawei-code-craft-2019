@@ -90,7 +90,7 @@ struct Heap {
 		return w < rhs.w;
 	}
 };
-void Output(int from, int to, int &plantime, int car_speed);
+void Output(int from, int to, int &plantime, int car_speed, int &roadCount);
 vector<vector <int> > front_road;
 vector<vector <int> > front_cross;
 ofstream outfile;
@@ -210,26 +210,38 @@ int main(int argc, char *argv[])
 
 
 	int roadAllLength = 0;
+	int channelAll = 0;
     for (int i = 0; i < road.size(); ++i) {
         roadAllLength += road[i].length;
+        channelAll += road[i].channel;
     }
     int roadAveLength = roadAllLength / road.size();
+    int channelAve = channelAll / road.size();
+
+    int carNum = 4 * roadAveLength * channelAve;
 
 
 
 	sort(car.begin(), car.end());
-	int *planTime = (int *)malloc(sizeof(int) * 4 * roadAveLength);
-    for (int i = 0; i < 4 * roadAveLength; ++i) {
+	int *planTime = (int *)malloc(sizeof(int) * carNum);
+    for (int i = 0; i < carNum; ++i) {
         planTime[i] = car[0].planTime;
     }
 
+    int oldPlanTime;
+    int roadCount;
 
 	//int planTime = car[0].planTime;
 	outfile.open(answerPath, ios::out);
 	for(int i = 0; i < car.size(); ++i){
-		outfile << "(" << car[i].id << ", " << planTime[i % (4 * roadAveLength)];
-		Output(car[i].from, car[i].to, planTime[i % (4 * roadAveLength)], car[i].speed);
+	    oldPlanTime = planTime[i % carNum];
+	    roadCount = 1;
+
+		outfile << "(" << car[i].id << ", " << planTime[i % carNum];
+		Output(car[i].from, car[i].to, planTime[i % carNum], car[i].speed, roadCount);
 		outfile << ")" << endl;
+		//planTime[i % carNum] = oldPlanTime + (planTime[i % carNum] - oldPlanTime) / roadCount;
+		planTime[i % carNum] = oldPlanTime + roadAveLength;
 	}
 	return 0;
 }
@@ -265,10 +277,11 @@ int Dijkstra(int s) {
 
 }
 
-void Output(int from, int to, int &plantime, int car_speed){
+void Output(int from, int to, int &plantime, int car_speed, int &roadCount){
 	if(to == from)
 		return;
-	Output(from, front_cross[from][to], plantime, car_speed);
+	roadCount++;
+	Output(from, front_cross[from][to], plantime, car_speed, roadCount);
 	plantime += road[front_cross[from][to] ].length / min(road[front_cross[from][to] ].speed, car_speed);
 	outfile << ", " << front_road[from][to];
 }
