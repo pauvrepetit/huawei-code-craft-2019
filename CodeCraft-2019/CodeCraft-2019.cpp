@@ -90,7 +90,7 @@ struct Heap {
 		return w < rhs.w;
 	}
 };
-void Output(int from, int to, int &plantime, int car_speed);	
+void Output(int from, int to, int &plantime, int car_speed);
 vector<vector <int> > front_road;
 vector<vector <int> > front_cross;
 ofstream outfile;
@@ -207,14 +207,28 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < cross.size(); ++i){
 		Dijkstra(i+1);
 	}
-	
+
+
+	int roadAllLength = 0;
+    for (int i = 0; i < road.size(); ++i) {
+        roadAllLength += road[i].length;
+    }
+    int roadAveLength = roadAllLength / road.size();
+
+
 
 	sort(car.begin(), car.end());
-	int planTime = car[0].planTime;
+	int *planTime = (int *)malloc(sizeof(int) * 4 * roadAveLength);
+    for (int i = 0; i < 4 * roadAveLength; ++i) {
+        planTime[i] = car[0].planTime;
+    }
+
+
+	//int planTime = car[0].planTime;
 	outfile.open(answerPath, ios::out);
 	for(int i = 0; i < car.size(); ++i){
-		outfile << "(" << car[i].id << ", " << planTime;
-		Output(car[i].from, car[i].to, planTime, car[i].speed);
+		outfile << "(" << car[i].id << ", " << planTime[i % (4 * roadAveLength)];
+		Output(car[i].from, car[i].to, planTime[i % (4 * roadAveLength)], car[i].speed);
 		outfile << ")" << endl;
 	}
 	return 0;

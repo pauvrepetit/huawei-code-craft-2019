@@ -1,0 +1,10 @@
+*.cmake
+*.bin
+*.out
+bin/
+build/
+*.gz
+CodeCraft-2019/cmake-build-debug/
+CodeCraft-2019/bin/
+CodeCraft-2019/.idea/
+config/answer.txt
