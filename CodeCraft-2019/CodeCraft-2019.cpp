@@ -15,6 +15,7 @@ using std::priority_queue;
 using std::getline;
 using std::endl;
 using std::min;
+using std::max;
 
 typedef struct Car{
 	int id;
@@ -23,7 +24,32 @@ typedef struct Car{
 	int speed;
 	int planTime;
 	bool operator < (const Car &rhs) const {
+		//return planTime < rhs.planTime;
+		//return from < rhs.from;
+
+//		if(from == rhs.from)
+//		{
+//			if(planTime == rhs.planTime)
+//				return speed > rhs.speed;
+//			return planTime < rhs.planTime;
+//		}
+//		return from < rhs.from;
+
+		if (planTime == rhs.planTime) {
+//			if (from == rhs.from)
+//				return speed > rhs.speed;
+//			return from < rhs.from;
+			return speed > rhs.speed;
+		}
 		return planTime < rhs.planTime;
+
+//		if(from == rhs.from)
+//		{
+//			if(planTime == rhs.planTime)
+//				return speed > rhs.speed;
+//			return planTime < rhs.planTime;
+//		}
+//		return from < rhs.from;
 	}
 }Car;
 
@@ -211,21 +237,26 @@ int main(int argc, char *argv[])
 
 	int roadAllLength = 0;
 	int channelAll = 0;
+	int roadSpeedAll = 0;
     for (int i = 0; i < road.size(); ++i) {
         roadAllLength += road[i].length;
         channelAll += road[i].channel;
+        roadSpeedAll += road[i].speed;
     }
     int roadAveLength = roadAllLength / road.size();
     int channelAve = channelAll / road.size();
+    int roadSpeedAve = roadSpeedAll / road.size();
 
-    int carNum = 4 * roadAveLength * channelAve;
-
+    //int carNum = 4 * roadAveLength * channelAve;
+    int carNum = car.size() / cross.size();
+    carNum = max(carNum, 4 * roadAveLength * channelAve);
+	//int carNum = car.size();
 
 
 	sort(car.begin(), car.end());
 	int *planTime = (int *)malloc(sizeof(int) * carNum);
     for (int i = 0; i < carNum; ++i) {
-        planTime[i] = car[0].planTime;
+        planTime[i] = car[i].planTime;
     }
 
     int oldPlanTime;
@@ -236,6 +267,10 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < car.size(); ++i){
 	    oldPlanTime = planTime[i % carNum];
 	    roadCount = 1;
+	    if(car[i].planTime > oldPlanTime) {
+			planTime[i % carNum] = car[i].planTime;
+			oldPlanTime = car[i].planTime;
+		}
 
 		outfile << "(" << car[i].id << ", " << planTime[i % carNum];
 		Output(car[i].from, car[i].to, planTime[i % carNum], car[i].speed, roadCount);
