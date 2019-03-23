@@ -1,4 +1,4 @@
-#include "solve.h"
+#include "tree.h"
 
 
 vector<Cross_temporary> cross_temporary;
@@ -77,7 +77,7 @@ void Output(int from, int to, int &plantime, int car_speed, int &roadCount){
 	return;
 }
 
-bool solve(string &answerPath){
+bool tree_solve(string &answerPath){
 	root.resize(cross.size()+1 , 0);
 	is_mini_tree.resize(road.size(), 0);
     if(minimum_spanning_tree() == false)
@@ -139,49 +139,6 @@ bool shortest_path(){
 	}
 
 	return true;
-	/*int roadAllLength = 0;
-	int channelAll = 0;
-	int roadSpeedAll = 0;
-    for (int i = 0; i < road.size(); ++i) {
-        roadAllLength += road[i].length;
-        channelAll += road[i].channel;
-        roadSpeedAll += road[i].speed;
-    }
-    int roadAveLength = roadAllLength / road.size();
-    int channelAve = channelAll / road.size();
-    int roadSpeedAve = roadSpeedAll / road.size();
-
-    //int carNum = 4 * roadAveLength * channelAve;
-    int carNum = car.size() / cross.size();
-    carNum = max(carNum, 4 * roadAveLength * channelAve);
-	//int carNum = car.size();
-
-
-	sort(car.begin(), car.end());
-	int *planTime = (int *)malloc(sizeof(int) * carNum);
-    for (int i = 0; i < carNum; ++i) {
-        planTime[i] = car[i].planTime;
-    }
-
-    int oldPlanTime;
-    int roadCount;
-
-	//int planTime = car[0].planTime;
-	
-	for(int i = 0; i < car.size(); ++i){
-	    oldPlanTime = planTime[i % carNum];
-	    roadCount = 1;
-	    if(car[i].planTime > oldPlanTime) {
-			planTime[i % carNum] = car[i].planTime;
-			oldPlanTime = car[i].planTime;
-		}
-
-		outfile << "(" << car[i].id << ", " << planTime[i % carNum];
-		Output(car[i].from, car[i].to, planTime[i % carNum], car[i].speed, roadCount);
-		outfile << ")" << endl;
-		//planTime[i % carNum] = oldPlanTime + (planTime[i % carNum] - oldPlanTime) / roadCount;
-		planTime[i % carNum] = oldPlanTime + roadAveLength;
-	}*/
 }
 
 void output(string &answerPath){
