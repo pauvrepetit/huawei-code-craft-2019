@@ -3,6 +3,7 @@
 vector<Car> car;
 vector<Road> road;
 vector<Cross> cross;
+ofstream outfile;
 
 vector<int> string_analysis(string &one_line){
 	vector<int> re_value;

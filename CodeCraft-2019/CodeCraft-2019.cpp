@@ -1,6 +1,7 @@
 #include "iostream"
 #include "input.h"
-#include "tree.h"
+//#include "tree.h"
+#include "grid.h"
 #include <fstream>
 #include <vector>
 #include <algorithm>
@@ -29,7 +30,7 @@ int main(int argc, char *argv[])
 		cout << "input error" << endl;
 		exit(1);
 	}
-	tree_solve(answerPath);
+	grid_solve(answerPath);
 	return 0;
 }
 

@@ -66,8 +66,8 @@ typedef struct Cross_temporary{
 extern vector<Car> car;
 extern vector<Road> road;
 extern vector<Cross> cross;
+extern ofstream outfile;
 
-vector<int> string_analysis(string &one_line);
 bool input(string &carPath, string &roadPath, string &crossPath);
 
 #endif
