@@ -7,6 +7,7 @@ build/
 CodeCraft-2019/cmake-build-debug/
 CodeCraft-2019/bin/
 CodeCraft-2019/.idea/
-config/answer.txt
+config
 .DS_Store
 CodeCraft-2019/.DS_Store
+.vscode
