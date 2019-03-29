@@ -47,7 +47,7 @@ bool Dijkstra(int s, int t) {
 		if(dis[x.id] != x.w) 
 			continue;
 		for(int i = 0; i < 4; ++i){
-			if(cross_temporary[x.id ].roadId[i] == -1 || (road[cross_temporary[x.id ].roadId[i] ].len_sped / road[cross_temporary[x.id ].roadId[i] ].channel) > 4500)
+			if(cross_temporary[x.id ].roadId[i] == -1 || (road[cross_temporary[x.id ].roadId[i] ].len_sped / road[cross_temporary[x.id ].roadId[i] ].channel) > 2400)
 				continue;
 			int k = cross_temporary[x.id ].to[i];
 			if(dis[k] > dis[x.id] + road[cross_temporary[x.id ].roadId[i] ].len_sped){

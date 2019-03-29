@@ -31,13 +31,13 @@ void dyn_solve(string &answerPath){
         dyn_car.pop();
         for(;!inc_time.empty() && inc_time.top().w < one_car.w;){
             for(auto road_to : car_path[inc_time.top().id]){
-                road[road_to].len_sped -= car_time[inc_time.top().id] * 2;
+                road[road_to].len_sped -= car_time[inc_time.top().id];
             }
             inc_time.pop();
         }
         bool len = Dijkstra(car[one_car.id].from, car[one_car.id].to);
         if(!len){
-            one_car.w += (rand()%5) + 1;
+            one_car.w +=  1;
             dyn_car.push(one_car);
             continue;
         }
@@ -45,7 +45,7 @@ void dyn_solve(string &answerPath){
         outfile << "(" << car[one_car.id].id + 10000 << ", " << static_cast<int>( one_car.w);
         for(auto road_to : car_path[one_car.id]){
             outfile << ", " << road_to + 5000;
-            road[road_to].len_sped += car_time[one_car.id] * 2;
+            road[road_to].len_sped += car_time[one_car.id];
         }
         outfile << ")" << endl;
         inc_time.push(Heap{static_cast<int>(one_car.id),one_car.w + car_time[one_car.id]});
