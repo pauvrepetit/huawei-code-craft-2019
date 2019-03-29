@@ -1,7 +1,8 @@
 #include "iostream"
 #include "input.h"
 //#include "tree.h"
-#include "grid.h"
+//#include "grid.h"
+#include "dyn.h"
 #include <fstream>
 #include <vector>
 #include <algorithm>
@@ -30,7 +31,9 @@ int main(int argc, char *argv[])
 		cout << "input error" << endl;
 		exit(1);
 	}
-	grid_solve(answerPath);
+	outfile.open(answerPath, ios::out);
+	//grid_solve(answerPath);
+	dyn_solve(answerPath);
 	return 0;
 }
 

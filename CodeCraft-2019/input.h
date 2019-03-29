@@ -63,6 +63,14 @@ typedef struct Cross_temporary{
 	double length[4];
 }Cross_temporary;
 
+struct Heap {
+	int id;
+	double w;
+	bool operator < (const Heap &rhs) const {
+		return w > rhs.w;
+	}
+};
+
 extern vector<Car> car;
 extern vector<Road> road;
 extern vector<Cross> cross;

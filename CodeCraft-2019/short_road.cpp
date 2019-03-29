@@ -1,12 +1,6 @@
 #include "short_road.h"
 
-struct Heap {
-	int id;
-	double w;
-	bool operator < (const Heap &rhs) const {
-		return w < rhs.w;
-	}
-};
+
 
 vector<Cross_temporary> cross_temporary;
 
@@ -14,8 +8,6 @@ vector<vector <int> > front_road;
 vector<vector <int> > front_cross;
 
 bool build_weighted_map(){
-	Cross_temporary new_cross_temporary;
-	cross_temporary.push_back(new_cross_temporary);
     for(decltype(cross.size() ) i = 0; i < cross.size(); ++i){
 		Cross_temporary new_cross_temporary;
 		new_cross_temporary.id = cross[i].id;
@@ -23,24 +15,21 @@ bool build_weighted_map(){
 			new_cross_temporary.roadId[j] = cross[i].roadId[j];
 			if(new_cross_temporary.roadId[j] == -1)
 				continue;
-            //if(is_mini_tree[cross[i].roadId[j] - 5000] == 0)           //  mini_tree new increase
-            //    new_cross_temporary.roadId[j] = -1;
-			if(road[cross[i].roadId[j] - 5000].to == cross[i].id && road[cross[i].roadId[j] - 5000].isDuplex == 0)	//5000
+			if(road[cross[i].roadId[j] ].to == cross[i].id && road[cross[i].roadId[j]].isDuplex == 0)	//5000
 				new_cross_temporary.roadId[j] = -1;
 			if(new_cross_temporary.roadId[j] == -1)
 				continue;
-			if(road[cross[i].roadId[j] - 5000].to == cross[i].id)
-				new_cross_temporary.to[j] = road[cross[i].roadId[j] - 5000].from;
+			if(road[cross[i].roadId[j] ].to == cross[i].id)
+				new_cross_temporary.to[j] = road[cross[i].roadId[j] ].from;
 			else
-				new_cross_temporary.to[j] = road[cross[i].roadId[j] - 5000].to;
-			new_cross_temporary.length[j] = road[cross[i].roadId[j] - 5000].len_sped;		
+				new_cross_temporary.to[j] = road[cross[i].roadId[j] ].to;		
 		}
 		cross_temporary.push_back(new_cross_temporary);
 	}
     return true;
 }
 
-int Dijkstra(int s) {
+bool Dijkstra(int s, int t) {
 	double *dis = (double *)malloc(sizeof(double) * (cross.size() + 1));
 	priority_queue<Heap> q;
 
@@ -53,21 +42,23 @@ int Dijkstra(int s) {
 	while(!q.empty()) {
 		Heap x = q.top(); 
 		q.pop();
+		if(x.id == t)
+			return true;
 		if(dis[x.id] != x.w) 
 			continue;
 		for(int i = 0; i < 4; ++i){
-			if(cross_temporary[x.id ].roadId[i] == -1)
+			if(cross_temporary[x.id ].roadId[i] == -1 || (road[cross_temporary[x.id ].roadId[i] ].len_sped / road[cross_temporary[x.id ].roadId[i] ].channel) > 4500)
 				continue;
 			int k = cross_temporary[x.id ].to[i];
-			if(dis[k] > dis[x.id] + cross_temporary[x.id ].length[i]){
-				dis[k] = dis[x.id] + cross_temporary[x.id ].length[i];
+			if(dis[k] > dis[x.id] + road[cross_temporary[x.id ].roadId[i] ].len_sped){
+				dis[k] = dis[x.id] + road[cross_temporary[x.id ].roadId[i] ].len_sped;
 				front_cross[s][k] = x.id;
 				front_road[s][k] = cross_temporary[x.id ].roadId[i];
 				q.push(Heap{k, dis[k]});
 			}
 		}
 	}
-	return 0;
+	return false;
 
 }
 
@@ -89,6 +80,19 @@ void Output(int from, int to, int &plantime, int car_speed, int &roadCount){
 	return;
 }
 
+bool pre_short(){
+	front_cross.resize(cross.size() + 1);
+	for(decltype(cross.size() )  i = 0; i < front_cross.size(); ++i){
+		front_cross[i].resize(cross.size() + 1);
+	}
+
+	front_road.resize(cross.size() + 1);
+	for(decltype(cross.size() )  i = 0; i < front_road.size(); ++i){
+		front_road[i].resize(cross.size() + 1);
+	}
+	return true;
+}
+
 bool shortest_path(){
     front_cross.resize(cross.size() + 1);
 	for(decltype(cross.size() )  i = 0; i < front_cross.size(); ++i){
@@ -101,7 +105,7 @@ bool shortest_path(){
 	}
 
 	for(decltype(cross.size() )  i = 0; i < cross.size(); ++i){
-		Dijkstra(i+1);
+	//	Dijkstra(i);
 	}
 
 	return true;
