@@ -76,6 +76,9 @@ extern vector<Road> road;
 extern vector<Cross> cross;
 extern ofstream outfile;
 
+int car_numtoreal(int x);
+int road_numtoreal(int x);
+int cross_numtoreal(int x);
 bool input(string &carPath, string &roadPath, string &crossPath);
 
 #endif

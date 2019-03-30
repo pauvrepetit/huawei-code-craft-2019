@@ -5,14 +5,15 @@ vector<vector<int> > car_path;
 vector<double> car_time;
 priority_queue< Heap> inc_time;
 priority_queue< Heap> dyn_car;
+double max_time = 0;
 
 void dyn_feedback(int id, int now){
-	if(car[id].from == now)
+	if(car[id].from == now || now == -1 || front_road[car[id].from][now] == -1){
 		return;
+    }
 	dyn_feedback(id, front_cross[car[id].from][now]);
 	car_time[id] += static_cast<double>(road[front_road[car[id].from][now] ].length )/ min(road[front_road[car[id].from][now] ].speed, car[id].speed);
     car_path[id].push_back(front_road[car[id].from][now]);
-
 	return;
 }
 
@@ -37,18 +38,19 @@ void dyn_solve(string &answerPath){
         }
         bool len = Dijkstra(car[one_car.id].from, car[one_car.id].to);
         if(!len){
-            one_car.w +=  1;
+            one_car.w += 1;
             dyn_car.push(one_car);
             continue;
         }
         dyn_feedback(one_car.id, car[one_car.id].to);
-        outfile << "(" << car[one_car.id].id + 10000 << ", " << static_cast<int>( one_car.w);
+        outfile << "(" << car_numtoreal( car[one_car.id].id) << ", " << static_cast<int>( one_car.w);
         for(auto road_to : car_path[one_car.id]){
-            outfile << ", " << road_to + 5000;
+            outfile << ", " << road_numtoreal(road_to) ;
             road[road_to].len_sped += car_time[one_car.id];
         }
         outfile << ")" << endl;
-        inc_time.push(Heap{static_cast<int>(one_car.id),one_car.w + car_time[one_car.id]});
+        one_car.w += car_time[one_car.id];
+        inc_time.push(one_car);
     }
     
 }

@@ -33,11 +33,14 @@ bool Dijkstra(int s, int t) {
 	double *dis = (double *)malloc(sizeof(double) * (cross.size() + 1));
 	priority_queue<Heap> q;
 
-	for(decltype(cross.size() )  i = 0; i <= cross.size(); ++i) 
+	for(decltype(cross.size() )  i = 0; i <= cross.size(); ++i) {
+		front_cross[s][i] = -1;
+		front_road[s][i] = -1;
 		dis[i] = 2147483647;
+	}
 	dis[s] = 0;
 	q.push(Heap{s, dis[s]});
-	front_cross[s][s] = -1;
+	
 
 	while(!q.empty()) {
 		Heap x = q.top(); 
@@ -47,7 +50,7 @@ bool Dijkstra(int s, int t) {
 		if(dis[x.id] != x.w) 
 			continue;
 		for(int i = 0; i < 4; ++i){
-			if(cross_temporary[x.id ].roadId[i] == -1 || (road[cross_temporary[x.id ].roadId[i] ].len_sped / road[cross_temporary[x.id ].roadId[i] ].channel) > 2400)
+			if(cross_temporary[x.id ].roadId[i] == -1 || (road[cross_temporary[x.id ].roadId[i] ].len_sped / road[cross_temporary[x.id ].roadId[i] ].channel) > 3000)
 				continue;
 			int k = cross_temporary[x.id ].to[i];
 			if(dis[k] > dis[x.id] + road[cross_temporary[x.id ].roadId[i] ].len_sped){
@@ -62,23 +65,6 @@ bool Dijkstra(int s, int t) {
 
 }
 
-void short_road_output(int from, int to){
-    if(to == from)
-		return;
-	short_road_output(from, front_cross[from][to]);
-	outfile << ", " << front_road[from][to];
-}
-
-/* Shortest path output */
-void Output(int from, int to, int &plantime, int car_speed, int &roadCount){
-	if(to == from)
-		return;
-	roadCount++;
-	Output(from, front_cross[from][to], plantime, car_speed, roadCount);
-	plantime += road[front_cross[from][to] ].length / min(road[front_cross[from][to] ].speed, car_speed);
-	outfile << ", " << front_road[from][to];
-	return;
-}
 
 bool pre_short(){
 	front_cross.resize(cross.size() + 1);
