@@ -15,11 +15,11 @@ bool build_weighted_map(){
 			new_cross_temporary.roadId[j] = cross[i].roadId[j];
 			if(new_cross_temporary.roadId[j] == -1)
 				continue;
-			if(road[cross[i].roadId[j] ].to == cross[i].id && road[cross[i].roadId[j]].isDuplex == 0)	//5000
+			if(road[cross[i].roadId[j] ].to == i && road[cross[i].roadId[j]].isDuplex == 0)	//5000
 				new_cross_temporary.roadId[j] = -1;
 			if(new_cross_temporary.roadId[j] == -1)
 				continue;
-			if(road[cross[i].roadId[j] ].to == cross[i].id)
+			if(road[cross[i].roadId[j] ].to == i)
 				new_cross_temporary.to[j] = road[cross[i].roadId[j] ].from;
 			else
 				new_cross_temporary.to[j] = road[cross[i].roadId[j] ].to;		
@@ -45,12 +45,14 @@ bool Dijkstra(int s, int t) {
 	while(!q.empty()) {
 		Heap x = q.top(); 
 		q.pop();
-		if(x.id == t)
+		if(x.id == t){
+			free(dis);
 			return true;
+		}
 		if(dis[x.id] != x.w) 
 			continue;
 		for(int i = 0; i < 4; ++i){
-			if(cross_temporary[x.id ].roadId[i] == -1 || (road[cross_temporary[x.id ].roadId[i] ].len_sped / road[cross_temporary[x.id ].roadId[i] ].channel) > 3000)
+			if(cross_temporary[x.id ].roadId[i] == -1 || (road[cross_temporary[x.id ].roadId[i] ].len_sped / road[cross_temporary[x.id ].roadId[i] ].channel) > ROAD_LIMIT)
 				continue;
 			int k = cross_temporary[x.id ].to[i];
 			if(dis[k] > dis[x.id] + road[cross_temporary[x.id ].roadId[i] ].len_sped){
@@ -61,6 +63,7 @@ bool Dijkstra(int s, int t) {
 			}
 		}
 	}
+	free(dis);
 	return false;
 
 }

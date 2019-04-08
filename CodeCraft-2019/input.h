@@ -5,6 +5,8 @@
 #include <vector>
 #include <algorithm>
 #include <queue>
+#define MAX_TIME 1000
+#define ROAD_LIMIT 15000
 
 using std::string;
 using std::cin;
@@ -25,12 +27,15 @@ typedef struct Car{
 	int to;
 	int speed;
 	int planTime;
+	int isPriority;
+	int isPreset;
 	bool operator < (const Car &rhs) const {
-		if (planTime == rhs.planTime) {
+		/*if (planTime == rhs.planTime) {
 
 			return speed > rhs.speed;
 		}
-		return planTime < rhs.planTime;
+		return planTime < rhs.planTime;*/
+		return isPriority > rhs.isPriority;
 	}
 }Car;
 
@@ -56,6 +61,12 @@ typedef struct Cross{
 	int roadId[4];
 }Cross;
 
+typedef struct Preset{
+	int id;
+	int plantime;
+	vector<int> roadId;
+}Preset;
+
 typedef struct Cross_temporary{
 	int id;
 	int to[4];
@@ -71,14 +82,34 @@ struct Heap {
 	}
 };
 
+struct car_Heap{
+	int number;
+	int priority;
+	int plantime;
+	int preset;
+	bool operator < (const car_Heap &rhs) const {
+		if(plantime == rhs.plantime && preset == rhs.preset)
+			return priority < rhs.priority;
+		if(plantime == rhs.plantime)
+			return preset < rhs.preset;
+		return plantime > rhs.plantime;
+	}
+};
+
+
 extern vector<Car> car;
 extern vector<Road> road;
 extern vector<Cross> cross;
+extern vector<Preset> preset;
 extern ofstream outfile;
+extern vector<vector<double>> road_preset;
+extern int map_1_2;
 
 int car_numtoreal(int x);
 int road_numtoreal(int x);
 int cross_numtoreal(int x);
-bool input(string &carPath, string &roadPath, string &crossPath);
+int find_preset_num(int x);
+double tree_sum (int cross_num,int k);
+bool input(string &carPath, string &roadPath, string &crossPath, string &presetAnswer);
 
 #endif
