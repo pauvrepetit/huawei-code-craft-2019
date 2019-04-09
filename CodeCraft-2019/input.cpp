@@ -207,6 +207,7 @@ bool input(string &carPath, string &roadPath, string &crossPath, string &presetA
 			}*/
 				
 			tree_edit(preset[i].roadId[j], preset[i].plantime, inc_time); 
+			tree_edit(preset[i].roadId[j], preset[i].plantime + static_cast<int>(inc_time), -1 * inc_time); 
 		}
 	}
 

@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <queue>
 #define MAX_TIME 1000
-#define ROAD_LIMIT 15000
+#define ROAD_LIMIT 12000
 
 using std::string;
 using std::cin;
