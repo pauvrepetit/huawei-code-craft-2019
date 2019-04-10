@@ -111,5 +111,6 @@ int cross_numtoreal(int x);
 int find_preset_num(int x);
 double tree_sum (int cross_num,int k);
 bool input(string &carPath, string &roadPath, string &crossPath, string &presetAnswer);
+vector<int> string_analysis(string &one_line);
 
 #endif

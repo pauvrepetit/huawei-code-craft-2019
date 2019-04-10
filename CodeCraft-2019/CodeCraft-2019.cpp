@@ -36,9 +36,11 @@ int main(int argc, char *argv[])
 	outfile.open(answerPath, ios::out);
 	//grid_solve(answerPath);
 	//dyn_solve(answerPath);*/
+	
 	ifstream infile;
-	infile.open("../CodeCraft-2019/1.txt");
 	string one_line;
+	infile.open("../CodeCraft-2019/1.txt");
+	
 	for(;getline(infile, one_line);){
 		outfile << one_line << endl;
 	}
