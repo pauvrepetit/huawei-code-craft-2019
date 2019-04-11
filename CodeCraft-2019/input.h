@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <queue>
 #define MAX_TIME 1000
-#define ROAD_LIMIT 12000
+#define ROAD_LIMIT 10500
 
 using std::string;
 using std::cin;
@@ -87,7 +87,10 @@ struct car_Heap{
 	int priority;
 	int plantime;
 	int preset;
+	int speed;
 	bool operator < (const car_Heap &rhs) const {
+	//	if(plantime == rhs.plantime && preset == rhs.preset && priority == rhs.priority)
+	//		return speed < rhs.speed;
 		if(plantime == rhs.plantime && preset == rhs.preset)
 			return priority < rhs.priority;
 		if(plantime == rhs.plantime)
@@ -104,6 +107,7 @@ extern vector<Preset> preset;
 extern ofstream outfile;
 extern vector<vector<double>> road_preset;
 extern int map_1_2;
+extern int late_set;
 
 int car_numtoreal(int x);
 int road_numtoreal(int x);

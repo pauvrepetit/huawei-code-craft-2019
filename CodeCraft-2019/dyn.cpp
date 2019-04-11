@@ -20,6 +20,7 @@ void dyn_feedback(int id, int now){
 
 
 void dyn_solve(string &answerPath){
+    int ans = 0;
     srand (time(NULL));
     car_path.resize(car.size() );
     car_time.resize(car.size(), 0);
@@ -27,7 +28,9 @@ void dyn_solve(string &answerPath){
 
     int car_num = 0;
     for(auto car_to:car){
-        dyn_car.push(car_Heap{car_num++, car_to.isPriority, car_to.planTime, car_to.isPreset});
+        if(car_to.isPriority == 1 && car_to.isPreset == 0)
+            car_to.planTime = max(car_to.planTime, late_set);
+        dyn_car.push(car_Heap{car_num++, car_to.isPriority, car_to.planTime, car_to.isPreset, car_to.speed});
     }
 
     pre_short();
@@ -35,7 +38,7 @@ void dyn_solve(string &answerPath){
     for(;!dyn_car.empty();){
         one_car = dyn_car.top();
         dyn_car.pop();
-        for(;!inc_time.empty() && inc_time.top().plantime <  one_car.plantime;){
+        for(;!inc_time.empty() && inc_time.top().plantime <=  one_car.plantime;){
             for(auto road_to : car_path[inc_time.top().number]){
                 road[road_to].len_sped -= car_time[inc_time.top().number];
             }
@@ -61,7 +64,13 @@ void dyn_solve(string &answerPath){
         else{
             bool len = Dijkstra(car[one_car.number].from, car[one_car.number].to);
             if(!len){
-                one_car.plantime =  inc_time.top().plantime +rand()%30 +1;
+                if(one_car.priority == 1)
+                    one_car.plantime =  inc_time.top().plantime;
+                else
+                    if(one_car.plantime < MAX_TIME)
+                        one_car.plantime =  inc_time.top().plantime +rand()%30;
+                    else
+                        one_car.plantime =  inc_time.top().plantime + rand()%8 +(20 - one_car.speed) ;
                 dyn_car.push(one_car);
                 continue;
             }
@@ -75,10 +84,18 @@ void dyn_solve(string &answerPath){
                     if((road[road_to].len_sped + car_time[one_car.number] + pre_num  ) / road[road_to].channel > ROAD_LIMIT){
                         car_time[one_car.number] = 0;
                         car_path[one_car.number].clear();
-                        if(inc_time.empty())
-                            one_car.plantime += rand()%30 +1;
-                        else
-                            one_car.plantime =  inc_time.top().plantime +rand()%30 +1;
+                        if(inc_time.empty()){
+                            if(one_car.priority == 1)
+                                one_car.plantime ++;
+                            else
+                                one_car.plantime += rand()%30; //8 + (20 - one_car.speed) ;
+                        }
+                        else{
+                            if(one_car.priority == 1)
+                                one_car.plantime =  inc_time.top().plantime;
+                            else
+                                one_car.plantime =  inc_time.top().plantime +rand()%30; //8 + (20 - one_car.speed);
+                        }
                         dyn_car.push(one_car);
                         kg = true;
                         break;
@@ -94,11 +111,13 @@ void dyn_solve(string &answerPath){
                 road[road_to].len_sped += car_time[one_car.number];
             }
             outfile << ")" << endl;
+            if( one_car.priority == 1)
+                ans = one_car.plantime;
             one_car.plantime += static_cast<int>(car_time[one_car.number]);
             inc_time.push(one_car);
         }
     }
-    
+    cout << ans << endl;
 }
 
 

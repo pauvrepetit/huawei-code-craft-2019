@@ -7,6 +7,7 @@ vector<Preset> preset;
 ofstream outfile;
 vector<vector<double>> road_preset;
 int map_1_2;
+int late_set = 0;
 
 int lowbit(int x)
 {
@@ -179,11 +180,6 @@ bool input(string &carPath, string &roadPath, string &crossPath, string &presetA
 		for(decltype(re_value.size() ) i = 2; i < re_value.size(); ++i){
 			int road_num = find_road_num(re_value[i]);
 			new_preset.roadId.push_back(road_num);
-			//tree_edit(road_num,re_value[1],1);
-			/*if(road_num == 193 && re_value[1] < 105){
-				
-				cout << temple << endl;
-			}*/
 		}
 		preset.push_back(new_preset);
 	}
@@ -198,6 +194,8 @@ bool input(string &carPath, string &roadPath, string &crossPath, string &presetA
 			inc_time += static_cast<double>(road[preset[i].roadId[j]].length) / min(road[preset[i].roadId[j]].speed, car[car_num].speed); 
 		}
 		inc_time *=  15/static_cast<double>(preset[i].roadId.size());
+		if(late_set == 0 && car[car_num].isPriority == 1)
+			late_set = preset[i].plantime;
 		//if(inc_time > 150)
 		//	cout << inc_time << endl;
 		for(decltype(preset[i].roadId.size()) j = 0; j < preset[i].roadId.size(); ++j){

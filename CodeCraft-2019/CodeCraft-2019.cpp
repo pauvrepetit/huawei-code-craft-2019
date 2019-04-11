@@ -29,21 +29,23 @@ int main(int argc, char *argv[])
 	std::cout << "presetAnswer is " << presetAnswer << std::endl;
 	std::cout << "answerPath is " << answerPath << std::endl;
 	
-	/*if(input(carPath, roadPath, crossPath, presetAnswer) == false){
+	outfile.open(answerPath, ios::out);
+
+	if(input(carPath, roadPath, crossPath, presetAnswer) == false){
 		cout << "input error" << endl;
 		exit(1);
-	}*/
-	outfile.open(answerPath, ios::out);
-	//grid_solve(answerPath);
-	//dyn_solve(answerPath);*/
+	}
 	
-	ifstream infile;
+	//grid_solve(answerPath);
+	dyn_solve(answerPath);
+	
+	/*ifstream infile;
 	string one_line;
 	infile.open("../CodeCraft-2019/1.txt");
 	
 	for(;getline(infile, one_line);){
 		outfile << one_line << endl;
-	}
+	}*/
 	
 	return 0;
 }
