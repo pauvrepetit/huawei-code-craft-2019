@@ -64,9 +64,9 @@ void dyn_solve(string &answerPath){
         else{
             bool len = Dijkstra(car[one_car.number].from, car[one_car.number].to);
             if(!len){
-                if(one_car.priority == 1)
-                    one_car.plantime =  inc_time.top().plantime;
-                else
+               // if(one_car.priority == 1)
+               //     one_car.plantime =  inc_time.top().plantime;
+              //  else
                     if(one_car.plantime < MAX_TIME)
                         one_car.plantime =  inc_time.top().plantime +rand()%30;
                     else
@@ -80,20 +80,20 @@ void dyn_solve(string &answerPath){
             if(one_car.plantime < MAX_TIME){
                 bool kg = false;
                 for(auto road_to : car_path[one_car.number]){
-                    double pre_num = tree_sum(road_to, one_car.plantime + static_cast<int>(car_time[one_car.number])) - tree_sum(road_to, one_car.plantime-1);
+                    double pre_num = tree_sum(road_to, one_car.plantime + static_cast<int>(car_time[one_car.number])) - tree_sum(road_to, one_car.plantime);
                     if((road[road_to].len_sped + car_time[one_car.number] + pre_num  ) / road[road_to].channel > ROAD_LIMIT){
                         car_time[one_car.number] = 0;
                         car_path[one_car.number].clear();
                         if(inc_time.empty()){
-                            if(one_car.priority == 1)
-                                one_car.plantime ++;
-                            else
+                          //  if(one_car.priority == 1)
+                          //      one_car.plantime ++;
+                           // else
                                 one_car.plantime += rand()%30; //8 + (20 - one_car.speed) ;
                         }
                         else{
-                            if(one_car.priority == 1)
-                                one_car.plantime =  inc_time.top().plantime;
-                            else
+                         //   if(one_car.priority == 1)
+                          //      one_car.plantime =  inc_time.top().plantime;
+                          //  else
                                 one_car.plantime =  inc_time.top().plantime +rand()%30; //8 + (20 - one_car.speed);
                         }
                         dyn_car.push(one_car);
